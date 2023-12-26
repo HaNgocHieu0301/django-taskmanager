@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+{% load static %}
+{% load static tailwind_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% tailwind_css %}
+</head>
+<body>
+    <div class="h-full bg-gradient-to-r from-[#984d38] from-[-30.3%] to-[#181E41] to-[58.12%] pb-5">
+        <div style="padding: 2.5% 7.5% 2.5% 10%">
+            <nav style="padding-bottom: 20px" class="">
+              <div class="mx-auto max-w-7xl px-2 md:px-6 lg:px-8">
+                <div class="w-full flex h-12 md:h-16 items-center justify-between">
+                  <!-- Mobile menu button-->
+                  <div class="flex items-center md:hidden">
+                    <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-white hover:gray-400" aria-controls="mobile-menu" aria-expanded="false">
+                      <span class="absolute -inset-0.5"></span>
+                      <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                      </svg>
+                      <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="flex flex-shrink-0 items-center">
+                    <a class="flex flex-row justify-center items-center gap-2 rounded-full text-sm bold text-white">
+                        <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                        <span>{{user_info.get_full_name}}</span>
+                    </a>
+                  </div>
+                  <div class="w-full hidden md:flex items-center justify-center">
+                    <div class="md:ml-6 md:block">
+                      <div class="flex space-x-4">
+                        <a href="{% url 'app:home' %}" class="text-white hover:text-gray-300 rounded-md px-3 py-2 text-xl font-medium">Home</a>
+                        <a href="{% url 'app:about' %}" class="text-white hover:text-gray-300 rounded-md px-3 py-2 text-xl font-medium">About</a>
+                        <a href="{% url 'app:projects' %}" class="text-white hover:text-gray-300 rounded-md px-3 py-2 text-xl font-medium">Projects</a>
+                        <a href="{% url 'app:contact' %}" class="text-white hover:text-gray-300 rounded-md px-3 py-2 text-xl font-medium">Contact</a>
+                      </div>
+                    </div>
+                  </div>
+    <!--                contact button-->
+                  <div class="hidden md:flex md:w-[300px] items-center">
+                    <a href="{% static 'uploads/cv.pdf' %}" download="cv.pdf" class="w-full text-center rounded-full bg-orange-600 text-xl text-white font-medium px-5 py-2.5">Download CV</a>
+                  </div>
+                </div>
+              </div>
+
+          <!-- Mobile menu -->
+          <div class="md:hidden hidden" id="mobile-menu">
+            <div class="space-y-1 px-2 pb-3 pt-2">
+              <a href="{% url 'app:home' %}" class="text-white hover:text-gray-300 block px-3 py-1 text-xs font-medium">Home</a>
+              <a href="{% url 'app:about' %}" class="text-white hover:text-gray-300 block px-3 py-1 text-xs font-medium">About</a>
+              <a href="{% url 'app:projects' %}" class="text-white hover:text-gray-300 block px-3 py-1 text-xs font-medium">Projects</a>
+              <a href="{% url 'app:contact' %}" class="text-white hover:text-gray-300 block px-3 py-1 text-xs font-medium">Contact</a>
+            </div>
+          </div>
+        </nav>
+            {% block content %}
+            {% endblock %}
+        </div>
+        <footer class="text-center text-white">
+            <hr>
+            <br>
+            <h2>@ 2023 hieuhn0301. All Rights Reserved.</h2>
+        </footer>
+    </div>
+    <script>
+        const mobileMenuButton = document.querySelector('[aria-controls="mobile-menu"]');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', function () {
+            // Kiểm tra xem mobile menu đã mở hay chưa
+            const isMobileMenuOpen = mobileMenu.classList.contains('hidden');
+            if (isMobileMenuOpen) {
+                mobileMenu.classList.remove('hidden');
+            } else {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
