@@ -32,10 +32,6 @@ class CustomLoginView(LoginView):
     def get_success_url(self):
         return reverse_lazy('home')
 
-    def form_invalid(self, form):
-        # Logic xử lý khi form không hợp lệ
-        return self.render_to_response(self.get_context_data(form=form))
-
     def get_form(self, form_class=None):
         if form_class is None:
             form_class = self.get_form_class()

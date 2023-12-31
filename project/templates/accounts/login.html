@@ -15,7 +15,6 @@
             <div class="p-4 md:p-5">
                 <form class="space-y-4" method="POST">
                     {% csrf_token %}
-                    {{ form.non_field_errors }}
                     {{form}}
 <!--                    <div class="flex justify-between">-->
 <!--                        <div class="flex items-start">-->
