@@ -2,7 +2,7 @@ from django import forms
 
 
 class InputCustom(forms.widgets.Input):
-    template_name = 'forms/widgets/textinput.html'
+    template_name = 'forms/widgets/textinputlogin.html'
 
     def get_context(self, name, value, attrs):
         print('text input')

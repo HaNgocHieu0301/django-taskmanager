@@ -1,0 +1,2 @@
+<label for="{{widget.name}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{widget.attrs.title}}</label>
+<textarea name={{widget.name}} id="{{widget.name}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" {% if widget.value != None %} value="{{ widget.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs.html"%}>

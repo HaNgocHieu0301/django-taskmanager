@@ -24,6 +24,7 @@ class DivErrorList(ErrorList):
             return ''
         return mark_safe('<div class="text-xs italic text-red-700">%s</div>' % ''.join(['<div class="error">%s</div>' % e for e in self]))
 
+
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
         required=True,

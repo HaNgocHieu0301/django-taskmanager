@@ -32,10 +32,10 @@ class CustomLoginView(LoginView):
     def get_success_url(self):
         return reverse_lazy('home')
 
-    def get_form(self, form_class=None):
-        if form_class is None:
-            form_class = self.get_form_class()
-        return form_class(self.request.POST or None, error_class=DivErrorList)
+    # def get_form(self, form_class=None):
+    #     if form_class is None:
+    #         form_class = self.get_form_class()
+    #     return form_class(self.request.POST or None, error_class=DivErrorList)
 
     # def form_valid(self, form):
     #     # remember_me = form.cleaned_data.get('remember_me')
