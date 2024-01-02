@@ -6,15 +6,19 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<!--    <link rel="stylesheet" href="{% static 'css/style.css' %}">-->
+    <link rel="stylesheet" href="{% static 'css/mystyle.css' %}">
     {% tailwind_css %}
 </head>
 <body>
     <div id="app" class="h-screen flex">
+<!--        Left-side navbar-->
         <div id="navbar" class="fixed z-30 inset-y-0 -translate-x-full left-0 w-64 px-8 py-4 bg-gray-100 border-r lg:static lg:inset-auto lg:translate-x-0">
             <div class="-mx-3 pl-3 pr-1 flex items-center justify-between">
                 <div>
-                    <img src="" alt="" class="h-9 w-9 inline-block">
+<!--                    <img src="" alt="" class="h-9 w-9 inline-block">-->
+                    <svg class="h-9 w-9 inline-block" xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24.7488 14.1421L14.1422 3.53553L3.53555 14.1421L14.1422 24.7487L24.7488 14.1421ZM14.1422 0L1.54972e-05 14.1421L14.1422 28.2843L28.2843 14.1421L14.1422 0Z" fill="#2563DC"/>
+                    </svg>
                     <span>Task Manager</span>
                 </div>
                 <button id="btnCloseNavBar" class="w-6 h-6 lg:hidden"><i class="fa-solid fa-xmark"></i></button>
@@ -23,46 +27,49 @@
                 <h3 class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Issues</h3>
                 <div class="mt-2 -mx-3">
                     <a href="#" class="flex justify-between px-3 py-2 bg-gray-200 rounded-lg">
-                        <span class="text-sm font-medium text-gray-900">All</span>
-                        <span class="text-xs font-semibold text-gray-700">{{tasks.count}}</span>
+                        <span class="text-xl font-medium text-gray-900">All</span>
+                        <span class="text-sm font-semibold text-gray-700">{{tasks.count}}</span>
                     </a>
-                    <a href="#" class="flex justify-between px-3 py-2 rounded-lg">
-                        <span class="text-sm font-medium text-gray-900">To Do</span>
-                        <span class="text-xs font-semibold text-gray-700">{{tasks.count}}</span>
-                    </a>
-                    <a href="#" class="flex justify-between px-3 py-2 rounded-lg">
-                        <span class="text-sm font-medium text-gray-900">In Progress</span>
-                        <span class="text-xs font-semibold text-gray-700">{{tasks.count}}</span>
-                    </a>
-                    <a href="#" class="flex justify-between px-3 py-2 rounded-lg">
-                        <span class="text-sm font-medium text-gray-900">Done</span>
-                        <span class="text-xs font-semibold text-gray-700">{{tasks.count}}</span>
-                    </a>
+                    <ul class="ml-2.5 text-sm">
+                    {% for state in states %}
+                        <li class="flex justify-between px-2 py-2 rounded-lg">
+                            <span class="text-sx font-medium text-gray-900">{{state.name}}</span>
+                            <span id="state-{{state.id}}" class="count-state text-xs font-semibold text-gray-700">{{state.tasks.count}}</span>
+                        </li>
+                    {% endfor %}
+                    </ul>
                 </div>
             </nav>
         </div>
+<!--        Center-->
         <div class="flex-1 min-w-0 flex flex-col bg-white">
+            <!--    Top bar         -->
             <div class="flex-shrink-0 border-b-2 border-gray-200">
                 <header class="px-6">
                     <div class="flex justify-between items-center py-3 border-b border-gray-200">
                         <div class="flex items-center flex-1">
                             <button id="btnOpenNavBar" class="w-6 h-6 lg:hidden"><i class="fa-solid fa-bars"></i></button>
-                            <div class="ml-4 relative w-64 lg:ml-0">
+                            <form class="ml-4 relative w-64 lg:ml-0" method="get" action="{% url 'home' %}">
+                                {% csrf_token %}
                                 <span class="absolute inset-y-0 left-0 pl-2 flex items-center"><i class="fa-solid fa-magnifying-glass"></i></span>
                                 <input class="block w-full rounded-md border border-gray-400 pl-10 pr-4 py-2 text-gray-900 placeholder-gray-600"
+                                       name="filter"
+                                       {% if search_key %} value="{{search_key}}" {% endif %}
                                        placeholder="Search" />
-                            </div>
+                            </form>
                         </div>
                         <div class="flex items-center">
 <!--                            <button class="h-6 w-6 text-gray-500"><i class="fa-regular fa-bell"></i></button>-->
                             {% if user.is_authenticated %}
                             <form method="POST" action="{% url 'logout' %}">
+                                <span>Hi, {{user.username}}</span>
                                 {% csrf_token %}
-                                <button class="text-gray-500">Logout</button>
                             </form>
                             {% endif %}
-                            <button class="ml-6">
-                                <img class="h-9 w-9 rounded-full object-cover" src="" alt="Your Profile Image">
+                            <button class="ml-6 bg-[#2563DC] rounded-xl px-2 py-2 text-xs font-medium text-white opacity-70 hover:opacity-50">
+<!--                                <img class="h-9 w-9 rounded-full object-cover" src="" alt="Your Profile Image">-->
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                               <span class="ml-2">Logout</span>
                             </button>
                         </div>
                     </div>
@@ -71,15 +78,7 @@
                             <h2>All Issues</h2>
                         </div>
                         <div class="flex justify-center items-center">
-                            <span class="inline-flex p-1 border bg-gray-200 rounded-md">
-                                <button class="flex justify-center items-center px-2 py-1 rounded h-6 w-6 text-gray-600">
-                                    <i class="fa-solid fa-list"></i>
-                                </button>
-                                <button class="flex justify-center items-center px-2 py-1 bg-white rounded shadow h-6 w-6 text-gray-600">
-                                    <i class="fa-solid fa-table-columns"></i>
-                                </button>
-                            </span>
-                            <button onclick="new_task_modal.showModal()" class="btn ml-5 flex justify-center items-center pr-4 pl-2 py-2 text-sm font-medium text-white bg-gray-800 hover:bg-gray-700 rounded-md">
+                            <button onclick="new_task_modal.showModal()" class="btn ml-5 flex justify-center items-center pr-4 pl-2 py-2 text-sm font-medium text-white bg-[#2563DC] hover:opacity-90 rounded-md">
                                 <span class="h-6 w-6"><i class="fa-solid fa-plus"></i></span>
                                 <span class="h-6">New Task</span>
                             </button>
@@ -87,38 +86,33 @@
                     </div>
                 </header>
             </div>
+            <!--    Main content    -->
             <div class="flex-1 overflow-auto">
                 {% if user.is_authenticated %}
                 <main class="p-3 h-full inline-flex overflow-hidden">
                     {% for state in states %}
-                    <div class="ml-3 flex-shrink-0 flex flex-col w-80 bg-gray-100 rounded-md">
+                    <div data-state-id="{{state.id}}" class="ml-3 flex-shrink-0 flex flex-col w-80 bg-gray-100 rounded-md">
                         <h3 class="flex-shrink-0 pt-3 pb-1 px-3 text-sm font-medium text-gray-900">{{state.name}}</h3>
-                        <div class="flex-1 min-h-0 overflow-y-auto">
+                        <div class="flex-1 min-h-0 overflow-y-auto swim-lane">
                             <ul class="pt-1 pb-3 px-3">
                                 {% for task in tasks %}
                                     {% if task.state.name == state.name %}
-                                    <li class="mt-3 task-link" data-task-id="{{task.id}}">
+                                    <li class="mt-3 task" data-task-id="{{task.id}}" draggable="true">
                                         <div class="p-5 bg-white rounded-md shadow border border-gray-300 hover:border-2 hover:ring-blue-500 hover:border-blue-500">
-                                            <div class="flex justify-between items-center leading-snug mb-1">
-                                                <p class="text-sm font-medium text-gray-900 overflow-y-hidden">{{task.title}}</p>
-                                                <div class="flex-shrink-0 flex flex-row gap-2">
-                                                    <a href="#" class="hover:opacity-50"><i class="h-4 w-4 fa-solid fa-pen"></i></a>
-                                                    <a href="#" class="hover:opacity-50"><i class="h-4 w-4 fa-solid fa-trash"></i></a>
-                                                </div>
+                                            <div class="leading-snug mb-1 text-sm font-medium text-gray-900 break-words overflow-y-hidden">
+                                                <span>{{task.title}}</span>
                                             </div>
-<!--                                            <hr>-->
                                             <div >
                                                 <div class="flex justify-between items-baseline overflow-y-hidden">
-<!--                                                    <p class="text-sm text-gray-600 break-words">-->
-<!--                                                        {{task.description}}-->
-<!--                                                    </p>-->
-                                                    {% if task.deadline %}
                                                     <div class="flex-shrink-0 mt-2">
-                                                        <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">
-                                                            <span class="text-sm font-medium text-teal-500">{{task.deadline}}</span>
-                                                        </span>
+                                                        {% if task.deadline %}
+                                                            <span class="deadline px-2 leading-tight inline-flex items-center bg-teal-100 rounded text-sm font-medium text-teal-500">{{task.deadline}}</span>
+                                                        {% endif %}
                                                     </div>
-                                                    {% endif %}
+                                                    <div class="flex-shrink-0 flex flex-row gap-2">
+<!--                                                        <a href="#" class="hover:opacity-50"><i class="h-4 w-4 fa-solid fa-pen"></i></a>-->
+                                                        <a href="#" class="hover:opacity-50"><i class="h-4 w-4 fa-solid fa-trash"></i></a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -129,413 +123,22 @@
                         </div>
                     </div>
                     {% endfor %}
-<!--                    <div class="ml-3 flex-shrink-0 flex flex-col w-80 bg-gray-100 rounded-md">-->
-<!--                        <h3 class="flex-shrink-0 pt-3 pb-1 px-3 text-sm font-medium text-gray-900">Ready for Review</h3>-->
-<!--                        <div class="flex-1 min-h-0 overflow-y-auto">-->
-<!--                            <ul class="pt-1 pb-3 px-3">-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="ml-3 flex-shrink-0 flex flex-col w-80 bg-gray-100 rounded-md">-->
-<!--                        <h3 class="flex-shrink-0 pt-3 pb-1 px-3 text-sm font-medium text-gray-900">Ready for Review</h3>-->
-<!--                        <div class="flex-1 min-h-0 overflow-y-auto">-->
-<!--                            <ul class="pt-1 pb-3 px-3">-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="ml-3 flex-shrink-0 flex flex-col w-80 bg-gray-100 rounded-md">-->
-<!--                        <h3 class="flex-shrink-0 pt-3 pb-1 px-3 text-sm font-medium text-gray-900">Ready for Review</h3>-->
-<!--                        <div class="flex-1 min-h-0 overflow-y-auto">-->
-<!--                            <ul class="pt-1 pb-3 px-3">-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="ml-3 flex-shrink-0 flex flex-col w-80 bg-gray-100 rounded-md">-->
-<!--                        <h3 class="flex-shrink-0 pt-3 pb-1 px-3 text-sm font-medium text-gray-900">Ready for Review</h3>-->
-<!--                        <div class="flex-1 min-h-0 overflow-y-auto">-->
-<!--                            <ul class="pt-1 pb-3 px-3">-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="mt-3">-->
-<!--                                    <a href="" class="block p-5 bg-white rounded-md shadow">-->
-<!--                                        <p class="text-sm font-medium text-gray-900 leading-snug">Add discount code to checkout</p>-->
-<!--                                        <div class="flex justify-between items-baseline">-->
-<!--                                            <div class="text-sm text-gray-600">Sep 14</div>-->
-<!--                                            <div class="mt-2">-->
-<!--                                                <span class="px-2 leading-tight inline-flex items-center bg-teal-100 rounded">-->
-<!--                                                    <span class="text-sm font-medium text-teal-500">Feature Request</span>-->
-<!--                                                </span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!--                    </div>-->
                 </main>
                 {% endif %}
             </div>
         </div>
         {% block content %}
         {% endblock %}
+<!--        Modal-->
         <dialog id="new_task_modal" class="modal">
             <div id="authentication-modal" tabindex="-1" aria-hidden="true" class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center">
                 <div class="relative p-4 w-full max-w-md h-auto">
                     <!-- Modal content -->
-                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <div class="relative bg-white rounded-lg shadow">
                         <!-- Modal header -->
-                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
                             <!--Header Title-->
-                            <h3 id="modal_title" class="text-xl font-semibold text-gray-900 dark:text-white">
+                            <h3 id="modal_title" class="text-xl font-semibold text-gray-900">
                                 Add new task
                             </h3>
                             <!--Header Close Button-->
@@ -547,33 +150,35 @@
                         </div>
                         <!-- Modal body -->
                         <div class="p-4 md:p-5">
-                            <form id="task_infor_form" class="space-y-4" action="{% url 'home' %}">
+                            <form id="task_infor_form" class="space-y-4" action="{% url 'home' %}" method="POST">
+                                {% csrf_token %}
+                                <input id="new_task_id" type="text" name="new_task_id" hidden>
                                 <div>
-<!--                                    <label for="new_task_title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your task</label>-->
-<!--                                    <input name="new_task_title" id="new_task_title"  placeholder="New Task" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>-->
-                                    {{form.title}}
+                                    <label for="new_task_title" class="block mb-2 text-sm font-medium text-gray-900">Your task</label>
+                                    <input name="new_task_title" id="new_task_title"  placeholder="New Task" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+<!--                                    {{form.title}}-->
                                 </div>
                                 <div>
-<!--                                    <label for="new_task_description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>-->
-<!--                                    <input name="new_task_description" id="new_task_description" placeholder="Description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>-->
-                                    {{form.description}}
+                                    <label for="new_task_description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
+                                    <input name="new_task_description" id="new_task_description" placeholder="Description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+<!--                                    {{form.description}}-->
                                 </div>
                                 <div class="flex flex-grow justify-between gap-x-1">
                                     <div class="w-1/2">
-                                        <label for="new_task_state" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">State</label>
-                                        <select id="new_task_state" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500" required>
+                                        <label for="new_task_state" class="block mb-2 text-sm font-medium text-gray-900">State</label>
+                                        <select id="new_task_state" name="new_task_state" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                                             <option disabled selected>Select task's state</option>
                                             {% for state in states %}
-                                            <option value="">{{state.name}}</option>
+                                            <option value="{{state.id}}">{{state.name}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <div class="w-1/2">
-                                        <label for="new_task_deadline" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deadline</label>
-                                        <input type="date" name="new_task_deadline" id="new_task_deadline" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                        <label for="new_task_deadline" class="block mb-2 text-sm font-medium text-gray-900">Deadline</label>
+                                        <input type="date" name="new_task_deadline" id="new_task_deadline" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :bg-gray-600">
                                     </div>
                                 </div>
-                                <button id="modal_btn" type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
+                                <button id="modal_btn" type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
                             </form>
                         </div>
                     </div>
@@ -581,70 +186,64 @@
             </div>
         </dialog>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        let isOpenNavBar = false
-        const navbar = document.getElementById('navbar')
-        console.log(navbar)
-        const btnCloseNavBar = document.getElementById('btnCloseNavBar')
-        console.log(btnCloseNavBar)
-        const btnOpenNavBar = document.getElementById('btnOpenNavBar')
-        console.log(btnOpenNavBar)
-        const btnCloseModal = document.getElementById('btn_close_modal')
-        function CloseNavBar(){
-            navbar.classList.remove('translate-x-0','ease-out')
-            navbar.classList.add('-translate-x-full','ease-in','transition-medium')
-        }
-        function ChangeModalInfor(title, btn){
-            const modalTitle = document.getElementById('modal_title')
-            const modalBtn = document.getElementById('modal_btn')
-            modalTitle.innerHTML = title
-            modalBtn.innerHTML = btn
-        }
-        btnCloseNavBar.addEventListener('click', CloseNavBar)
-        btnOpenNavBar.addEventListener('click', () => {
-            console.log("open nav bar")
-            navbar.classList.remove('-translate-x-full','ease-ine')
-            navbar.classList.add('translate-x-0','ease-out','transition-medium')
-        })
-        btnCloseModal.addEventListener('click', () => {
-            const form = document.getElementById('task_infor_form');
-            ChangeModalInfor('Add new task', 'Add')
-            form.reset()
-        })
+        const tasksData = JSON.parse('{{ tasks_json|escapejs }}');
         document.addEventListener('DOMContentLoaded', (event) => {
-            const tasksData = JSON.parse('{{ tasks_json|escapejs }}');
-            console.log(tasksData)
-            const taskLinks = document.querySelectorAll('.task-link');
-            taskLinks.forEach(task => {
+            const navbar = document.getElementById('navbar')
+            const btnCloseNavBar = document.getElementById('btnCloseNavBar')
+            const btnOpenNavBar = document.getElementById('btnOpenNavBar')
+            const btnCloseModal = document.getElementById('btn_close_modal')
+            function ChangeModalInfor(title, btn){
+                const modalTitle = document.getElementById('modal_title')
+                const modalBtn = document.getElementById('modal_btn')
+                modalTitle.innerHTML = title
+                modalBtn.innerHTML = btn
+            }
+            btnCloseNavBar.addEventListener('click', () => {
+                navbar.classList.remove('translate-x-0','ease-out')
+                navbar.classList.add('-translate-x-full','ease-in','transition-medium')
+            })
+            btnOpenNavBar.addEventListener('click', () => {
+                navbar.classList.remove('-translate-x-full','ease-ine')
+                navbar.classList.add('translate-x-0','ease-out','transition-medium')
+            })
+            btnCloseModal.addEventListener('click', () => {
+                const form = document.getElementById('task_infor_form');
+                ChangeModalInfor('Add new task', 'Add')
+                form.reset()
+            })
+            const tasks = document.querySelectorAll('.task');
+            tasks.forEach(task => {
                 task.addEventListener('click', function (){
                     ChangeModalInfor('Task Information', 'Update')
                     const taskId = this.dataset.taskId;
-                    console.log(taskId)
-                    const taskData = tasksData.find(task => {
-                        return task.pk == taskId
-                    })
-                    console.log(taskData)
+                    const taskData = tasksData.find(task => task.pk == taskId)
                     if(taskData){
                         const modal = document.getElementById('new_task_modal');
-                        modal.querySelector('#new_task_title').value = taskData.fields.title;
-                        modal.querySelector('#new_task_description').value = taskData.fields.description;
+                        console.log("modal")
+                        console.log(modal)
+                        console.log($('#new_task_modal'))
+                        $('#new_task_id').val(taskData.pk)
+                        $('#new_task_title').val(taskData.fields.title)
+                        $('#new_task_description').val(taskData.fields.description)
                         if (taskData.fields.deadline) {
-                            modal.querySelector('#new_task_deadline').value = taskData.fields.deadline;
+                            $('#new_task_deadline').val(taskData.fields.deadline)
                         } else {
-                            modal.querySelector('#new_task_deadline').value = ''; // Xóa ngày hết hạn cũ
+                            $('#new_task_deadline').val('No Deadline');
                         }
                         const stateSelect = modal.querySelector('#new_task_state');
                         Array.from(stateSelect.options).forEach(option => {
-                            if(option.text === taskData.fields.state){
+                            if(option.value == taskData.fields.state){
                                 option.selected = true
                             }
                         })
-
                         modal.showModal();
                     }
                 })
             })
         })
     </script>
+    <script src="{% static 'js/dragdroptask.js' %}"></script>
 </body>
 </html>

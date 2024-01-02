@@ -29,7 +29,7 @@ class TaskState(models.Model):
 class Task(models.Model):
     user = models.ForeignKey(UserInfo, related_name='tasks', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='static/images', blank=True, null=True)
     video = models.FileField(upload_to='static/videos', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
