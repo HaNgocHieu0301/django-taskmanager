@@ -36,7 +36,16 @@ droppables.forEach((zone) => {
         // document.querySelector(".is-dragging span").style.removeProperty('color')
         // document.querySelector(".is-dragging .deadline").style.removeProperty('background')
         // document.querySelector(".is-dragging .deadline").style.removeProperty('color')
-        UpdateTask(task, taskId, stateId, task.fields.description, task.fields.title, task.fields.deadline);
+        const allLis = zone.children[0].querySelectorAll("li");
+        const index = Array.from(allLis).indexOf(curTask);
+        console.log('check index')
+        console.log(Array.from(allLis))
+        console.log(allLis[index-1])
+        let previous_id = -1;
+        if (index > 0) {
+            previous_id = allLis[index-1].dataset.taskId
+        }
+        UpdateTask(task, taskId, stateId, task.fields.description, task.fields.title, task.fields.deadline, previous_id);
     })
     // let curTask = null; // Tạo biến tạm thời để lưu trữ curTask
     // let bottomTask = null
@@ -102,18 +111,19 @@ const insertAboveTask = (zone, mouseY) => {
     return closestTask
 }
 
-function UpdateTask(task, taskId, state, description, title, deadline) {
+function UpdateTask(task, taskId, state, description, title, deadline, previous_id) {
     const taskData = {
         'new_task_id': taskId,
         'new_task_state': state,
         'new_task_description': description,
         'new_task_title': title,
         'new_task_deadline': deadline,
+        'previous_id': previous_id,
         'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
     }
     $.ajax({
         type: 'POST',
-        url: '', // URL của view, để trống nếu cùng URL với trang hiện tại
+        url: '',
         data: taskData,
         success: function (response) {
             let countInt = parseInt($(`#state-${task.fields.state}`).html())

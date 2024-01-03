@@ -3,7 +3,7 @@ from .models import Task, TaskState
 
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'description')
+    list_display = ('id', 'title', 'description', 'user')
 
 
     # def get_form(self, request, obj=None, **kwargs):

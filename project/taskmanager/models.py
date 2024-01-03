@@ -36,8 +36,12 @@ class Task(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     deadline = models.DateField(blank=True, null=True)
     state = models.ForeignKey(TaskState, on_delete=models.CASCADE, related_name='tasks')
-    # tags = models.ManyToManyField('Tag')
+    position = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['position']
 
     def __str__(self):
         return f'{self.title}'
+
 

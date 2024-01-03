@@ -64,13 +64,13 @@
                             <form method="POST" action="{% url 'logout' %}">
                                 <span>Hi, {{user.username}}</span>
                                 {% csrf_token %}
+                                <button class="ml-6 bg-[#2563DC] rounded-xl px-2 py-2 text-xs font-medium text-white opacity-70 hover:opacity-50">
+<!--                                <img class="h-9 w-9 rounded-full object-cover" src="" alt="Your Profile Image">-->
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    <span class="ml-2">Logout</span>
+                                </button>
                             </form>
                             {% endif %}
-                            <button class="ml-6 bg-[#2563DC] rounded-xl px-2 py-2 text-xs font-medium text-white opacity-70 hover:opacity-50">
-<!--                                <img class="h-9 w-9 rounded-full object-cover" src="" alt="Your Profile Image">-->
-                                <i class="fa-solid fa-right-from-bracket"></i>
-                               <span class="ml-2">Logout</span>
-                            </button>
                         </div>
                     </div>
                     <div class="flex items-center justify-between py-2">
@@ -100,7 +100,7 @@
                                     <li class="mt-3 task" data-task-id="{{task.id}}" draggable="true">
                                         <div class="p-5 bg-white rounded-md shadow border border-gray-300 hover:border-2 hover:ring-blue-500 hover:border-blue-500">
                                             <div class="leading-snug mb-1 text-sm font-medium text-gray-900 break-words overflow-y-hidden">
-                                                <span>{{task.title}}</span>
+                                                <span>{{task.title}} - {{task.position}}</span>
                                             </div>
                                             <div >
                                                 <div class="flex justify-between items-baseline overflow-y-hidden">
@@ -221,9 +221,6 @@
                     const taskData = tasksData.find(task => task.pk == taskId)
                     if(taskData){
                         const modal = document.getElementById('new_task_modal');
-                        console.log("modal")
-                        console.log(modal)
-                        console.log($('#new_task_modal'))
                         $('#new_task_id').val(taskData.pk)
                         $('#new_task_title').val(taskData.fields.title)
                         $('#new_task_description').val(taskData.fields.description)
