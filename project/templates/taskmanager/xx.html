@@ -1,0 +1,70 @@
+<!--        <dialog id="new_task_modal" class="w-3/4 modal fixed inset-0 z-50 flex justify-center items-center bg-transparent">-->
+<!--          <div id="authentication-modal" class="relative bg-white rounded-lg shadow max-w-md w-full mx-auto my-8">-->
+<!--            &lt;!&ndash; Modal header &ndash;&gt;-->
+<!--            <div class="flex justify-between items-center p-5 border-b">-->
+<!--              <h3 id="modal_title" class="text-xl font-semibold text-gray-900">-->
+<!--                Add new task-->
+<!--              </h3>-->
+<!--              &lt;!&ndash;Header Close Button&ndash;&gt;-->
+<!--                <form method="dialog">-->
+<!--                    <button id="btn_close_modal" class="btn end-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8">-->
+<!--                        <i class="fa-solid fa-xmark"></i>-->
+<!--                    </button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; Modal body &ndash;&gt;-->
+<!--            <div class="modal-body p-5 overflow-y-auto" style="max-height: 80vh;">-->
+<!--              <form id="task_infor_form" class="space-y-4" action="{% url 'home' %}" method="POST">-->
+<!--                &lt;!&ndash; Form fields &ndash;&gt;-->
+<!--                {% csrf_token %}-->
+<!--                <input  id="new_task_id"-->
+<!--                        name="new_task_id"-->
+<!--                        hidden>-->
+<!--                <div>-->
+<!--                  <label for="new_task_title" class="block mb-2 text-sm font-medium text-gray-900">Your task</label>-->
+<!--                  <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"-->
+<!--                         name="new_task_title"-->
+<!--                         id="new_task_title"-->
+<!--                         placeholder="New Task"-->
+<!--                         required>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                  <label for="new_task_description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>-->
+<!--                  <input  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"-->
+<!--                          name="new_task_description"-->
+<!--                          id="new_task_description"-->
+<!--                          placeholder="Description">-->
+<!--                </div>-->
+<!--                <div class="flex flex-grow justify-between gap-x-1">-->
+<!--                  <div class="w-1/2">-->
+<!--                    <label for="new_task_state" class="block mb-2 text-sm font-medium text-gray-900">State</label>-->
+<!--                    <select id="new_task_state" name="new_task_state" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>-->
+<!--                      <option disabled selected>Select task's state</option>-->
+<!--                      {% for state in states %}-->
+<!--                      <option value="{{state.id}}">{{state.name}}</option>-->
+<!--                      {% endfor %}-->
+<!--                    </select>-->
+<!--                  </div>-->
+<!--                  <div class="w-1/2">-->
+<!--                    <label for="new_task_deadline" class="block mb-2 text-sm font-medium text-gray-900">Deadline</label>-->
+<!--                    <input type="date"-->
+<!--                           name="new_task_deadline"-->
+<!--                           id="new_task_deadline"-->
+<!--                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :bg-gray-600">-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                  <label for="new_task_image" class="block mb-2 text-sm font-medium text-gray-900">Image</label>-->
+<!--                  <input type="file" id="new_task_image" name="new_task_image" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">-->
+<!--                  <img src="" alt="">-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                  <label for="new_task_video" class="block mb-2 text-sm font-medium text-gray-900">Video</label>-->
+<!--                  <input type="file" id="new_task_video" name="new_task_video" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">-->
+<!--        &lt;!&ndash;                                    <video src=""></video>&ndash;&gt;-->
+<!--                </div>-->
+<!--                <button id="modal_btn" type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>-->
+<!--              </form>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </dialog>-->

@@ -29,7 +29,7 @@ class TaskForm(forms.Form):
     new_task_id = forms.IntegerField(required=False)
     new_task_title = forms.CharField(max_length=200)
     new_task_description = forms.CharField(max_length=1000)
-    # image = forms.ImageField()
+    image = forms.ImageField(required=False)
     # video = forms.FileField()
     new_task_deadline = forms.DateField(required=False)
     new_task_state = forms.IntegerField()
